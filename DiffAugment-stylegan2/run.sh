@@ -1,3 +1,5 @@
+set -e 
+
 cp /content/drive/MyDrive/img_align_celeba.zip .
 unzip img_align_celeba.zip 
 mkdir datasets 
