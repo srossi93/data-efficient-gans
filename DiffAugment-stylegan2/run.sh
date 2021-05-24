@@ -15,8 +15,8 @@ mkdir -p datasets/4000-celeba
 
 python3 prepare_datasets.py
 
-python3 run_low_shot.py --dataset="datasets/2000-celeba" --resolution=64 --total-kimg 15 --batch-size 128 --latent-size 64 --fmap-max 64 --fmap-base 2048 --mirror-augment False --num-repeats 4  --result-dir /content/drive/MyDrive/results
+python3 run_low_shot.py --dataset="datasets/2000-celeba" --resolution=64 --total-kimg 1500 --batch-size 128 --latent-size 64 --fmap-max 64 --fmap-base 2048 --mirror-augment False --num-repeats 4  --result-dir /content/drive/MyDrive/results
 
-python3 run_low_shot.py --dataset="datasets/4000-celeba" --resolution=64 --total-kimg 15 --batch-size 128 --latent-size 64 --fmap-max 64 --fmap-base 2048 --mirror-augment False --num-repeats 4  --result-dir /content/drive/MyDrive/results
+python3 run_low_shot.py --dataset="datasets/4000-celeba" --resolution=64 --total-kimg 1500 --batch-size 128 --latent-size 64 --fmap-max 64 --fmap-base 2048 --mirror-augment False --num-repeats 4  --result-dir /content/drive/MyDrive/results
 
-python3 run_low_shot.py --dataset="datasets/500-celeba" --resolution=64 --total-kimg 15 --batch-size 128 --latent-size 64 --fmap-max 64 --fmap-base 2048 --mirror-augment False --num-repeats 4  --result-dir /content/drive/MyDrive/results
+python3 run_low_shot.py --dataset="datasets/500-celeba" --resolution=64 --total-kimg 1500 --batch-size 128 --latent-size 64 --fmap-max 64 --fmap-base 2048 --mirror-augment False --num-repeats 4  --result-dir /content/drive/MyDrive/results
