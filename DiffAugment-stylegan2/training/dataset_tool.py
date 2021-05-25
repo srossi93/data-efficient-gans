@@ -74,6 +74,10 @@ class TFRecordExporter:
     def add_image(self, img):
         if self.print_progress and self.cur_images % self.progress_interval == 0:
             print('%d / %d\r' % (self.cur_images, self.expected_images), end='', flush=True)
+
+        # Crop
+        print(type(img))
+
         if self.shape is None:
             self.set_shape(img.shape)
         assert img.shape == self.shape
