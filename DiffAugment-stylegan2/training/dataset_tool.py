@@ -75,9 +75,6 @@ class TFRecordExporter:
         if self.print_progress and self.cur_images % self.progress_interval == 0:
             print('%d / %d\r' % (self.cur_images, self.expected_images), end='', flush=True)
 
-        # Crop
-        print(type(img))
-
         if self.shape is None:
             self.set_shape(img.shape)
         assert img.shape == self.shape
@@ -148,6 +145,27 @@ def create_from_lmdb(data_dir, resolution=None, tfrecord_dir=None, max_images=No
     return tfrecord_dir
 
 
+def center_crop(img, new_width=None, new_height=None):
+    width = img.shape[1]
+    height = img.shape[0]
+    if new_width is None:
+        new_width = min(width, height)
+    if new_height is None:
+        new_height = min(width, height)
+
+    left = int(np.ceil((width - new_width) / 2))
+    right = width - int(np.floor((width - new_width) / 2))
+
+    top = int(np.ceil((height - new_height) / 2))
+    bottom = height - int(np.floor((height - new_height) / 2))
+
+    if len(img.shape) == 2:
+        center_cropped_img = img[top:bottom, left:right]
+    else:
+        center_cropped_img = img[top:bottom, left:right, ...]
+
+    return center_cropped_img
+
 def create_from_images(data_dir, resolution=None, tfrecord_dir=None, shuffle=True):
     if tfrecord_dir is None:
         tfrecord_dir = data_dir
@@ -157,7 +175,8 @@ def create_from_images(data_dir, resolution=None, tfrecord_dir=None, shuffle=Tru
     if len(image_filenames) == 0:
         error('No input images found')
 
-    img = np.asarray(PIL.Image.open(image_filenames[0]))
+    img = PIL.Image.open(image_filenames[0])
+    img = np.asarray(center_crop(img, 148, 148))
     if resolution is None:
         resolution = img.shape[0]
         if img.shape[1] != resolution:
@@ -172,6 +191,8 @@ def create_from_images(data_dir, resolution=None, tfrecord_dir=None, shuffle=Tru
         order = tfr.choose_shuffled_order() if shuffle else np.arange(len(image_filenames))
         for idx in range(order.size):
             img = PIL.Image.open(image_filenames[order[idx]])
+            img = center_crop(img, 148, 148)
+            print(img)
             if resolution is not None:
                 img = img.resize((resolution, resolution), PIL.Image.ANTIALIAS)
             img = np.asarray(img)
@@ -179,6 +200,8 @@ def create_from_images(data_dir, resolution=None, tfrecord_dir=None, shuffle=Tru
                 img = np.stack([img] * channels)  # HW => CHW
             else:
                 img = img.transpose([2, 0, 1])  # HWC => CHW
+            print(img.shape)
+            quit()
             tfr.add_image(img)
     return tfrecord_dir
 
