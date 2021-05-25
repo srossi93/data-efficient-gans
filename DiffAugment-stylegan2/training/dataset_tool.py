@@ -146,8 +146,8 @@ def create_from_lmdb(data_dir, resolution=None, tfrecord_dir=None, max_images=No
 
 
 def center_crop(img, new_width=None, new_height=None):
-    width = img.shape[1]
-    height = img.shape[0]
+    width, height = img.size
+
     if new_width is None:
         new_width = min(width, height)
     if new_height is None:
@@ -159,12 +159,9 @@ def center_crop(img, new_width=None, new_height=None):
     top = int(np.ceil((height - new_height) / 2))
     bottom = height - int(np.floor((height - new_height) / 2))
 
-    if len(img.shape) == 2:
-        center_cropped_img = img[top:bottom, left:right]
-    else:
-        center_cropped_img = img[top:bottom, left:right, ...]
+    img = img.crop((left, top, right, bottom))
 
-    return center_cropped_img
+    return img
 
 def create_from_images(data_dir, resolution=None, tfrecord_dir=None, shuffle=True):
     if tfrecord_dir is None:
@@ -200,8 +197,6 @@ def create_from_images(data_dir, resolution=None, tfrecord_dir=None, shuffle=Tru
                 img = np.stack([img] * channels)  # HW => CHW
             else:
                 img = img.transpose([2, 0, 1])  # HWC => CHW
-            print(img.shape)
-            quit()
             tfr.add_image(img)
     return tfrecord_dir
 
