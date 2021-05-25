@@ -189,7 +189,6 @@ def create_from_images(data_dir, resolution=None, tfrecord_dir=None, shuffle=Tru
         for idx in range(order.size):
             img = PIL.Image.open(image_filenames[order[idx]])
             img = center_crop(img, 148, 148)
-            print(img)
             if resolution is not None:
                 img = img.resize((resolution, resolution), PIL.Image.ANTIALIAS)
             img = np.asarray(img)
